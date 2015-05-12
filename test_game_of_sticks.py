@@ -20,9 +20,11 @@ def test_player_can_choose_num_sticks():
 
 class AutoPlayer(Player):
     pass
+
 class PlayerThatAlwaysPicksThree(Player):
     def choose(self):
         return 3
+
 
 def test_first_turn_removes_sticks():
     p1 = PlayerThatAlwaysPicksThree()
@@ -66,7 +68,7 @@ def test_winner():
     print('after next next turn', game.sticks)
     assert game.check_winner() == p2
 
-def test_invalid_choice_rejected():
+def test_invalid_choice_rejected_gracefully():
     p1 = AutoPlayer()
     p2 = AutoPlayer()
     random.seed(10)
@@ -74,6 +76,31 @@ def test_invalid_choice_rejected():
     game = SticksGame(p1, p2, sticks=2)
     game.start()
     assert game.sticks == 1
+
+
+class RepeatingPlayer(Player):
+    def __init__(self):
+        super().__init__()
+        self.choice_sequence = [3,2,1]
+        self.index = 0
+    def choose(self):
+        if self.index > 2:
+            self.index = 0
+        self.index += 1
+        return self.choice_sequence[self.index - 1]
+
+def test_repeating_player():
+    p1 = RepeatingPlayer()
+    p2 = RepeatingPlayer()
+    game = SticksGame(p1, p2, sticks=100)
+    game.start()
+    sticks_history = [97, 94, 92, 90, 89, 88, 85, 82, 81]
+    score = iter(sticks_history)
+    assert game.sticks == next(score)
+    for _ in range(len(sticks_history)):
+        game.next_turn()
+        assert game.sticks == next(score)
+
 
 
 def test_auto_game_outcomes():
