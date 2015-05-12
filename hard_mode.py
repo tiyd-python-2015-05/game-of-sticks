@@ -33,4 +33,4 @@ class HardComputer(Computer):
         for indx, val in enumerate(self.end_hats):
             if val is not 0:
                 self.start_hats[indx].append(val)
-                self.start_hats[indx].append(val)
+                
