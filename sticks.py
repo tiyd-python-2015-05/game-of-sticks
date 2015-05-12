@@ -13,7 +13,6 @@ def game():
     return
 
 
-
 def turn(current_player='player1'):
     print(current_player)
     return current_player
