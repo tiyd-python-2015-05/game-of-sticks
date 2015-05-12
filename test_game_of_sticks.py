@@ -37,3 +37,29 @@ def test_switch_players():
     game.start()
     game.next_turn()
     assert game.current_player == p2
+
+def test_winner():
+    p1 = AutoPlayer()
+    p2 = AutoPlayer()
+    game = SticksGame(p1, p2, sticks=100)
+    game.start()
+    game.next_turn()
+    game.next_turn()
+    game.next_turn()
+    assert game.check_winner() is None
+
+    game = SticksGame(p1, p2, sticks=6)
+    game.start()
+    print('after start', game.sticks)
+    game.next_turn()
+    print('after next turn', game.sticks)
+    assert game.check_winner() == p1
+
+    game = SticksGame(p1, p2, sticks=9)
+    game.start()
+    print('after start', game.sticks)
+    game.next_turn()
+    print('after next turn', game.sticks)
+    game.next_turn()
+    print('after next next turn', game.sticks)
+    assert game.check_winner() == p2

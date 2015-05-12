@@ -14,19 +14,29 @@ class SticksGame:
             self.current_player = self.player_b
             turn = Turn(self.current_player)
             self.sticks -= turn.removed_sticks
-            self.check_win()
-        if self.current_player == self.player_a:
-            self.current_player = self.player_b
+        elif self.current_player == self.player_b:
+            self.current_player = self.player_a
             turn = Turn(self.current_player)
             self.sticks -= turn.removed_sticks
-            self.check_win()
-    def check_win(self):
-        return True
+    def check_winner(self):
+        print('checking winner...')
+        if self.sticks == 0:
+            return self.other()
+        return None
 
+    def other(self):
+        print("it's the other guy")
+        if self.current_player is self.player_a:
+            print(self.player_b)
+            return self.player_b
+        return self.player_a
+        print(self.player_a)
 
 class Player:
     def __init__(self, name='Sam'):
         self.name = name
+    def __repr__(self):
+        return '{}: {}'.format(self.__class__, self.name)
     def choose(self, auto=None):
         if auto is not None:
             return auto
