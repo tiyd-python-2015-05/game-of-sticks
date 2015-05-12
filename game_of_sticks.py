@@ -5,7 +5,12 @@ class SticksGame:
         self.sticks = sticks
 
 class Player:
-    pass
+    def __init__(self, name='Sam'):
+        self.name = name
+    def choose(self, auto=None):
+        if auto is not None:
+            return auto
+        return something_else
 
 class Turn:
     pass
