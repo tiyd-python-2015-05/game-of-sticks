@@ -36,14 +36,6 @@ def pick_up_sticks(sticks):
     return choice
 
 
-
-
-def calculate_number_of_sticks(choice):
-
-    sticks = 10 - choice
-
-    return sticks
-
 def is_choice_valid(choice,sticks):
 
     if not choice.isnumeric():
@@ -58,9 +50,9 @@ def is_choice_valid(choice,sticks):
     else:
         return True
 
-def is_there_a_winner(sticks):
-    if sticks == 0:
-        return
+# def is_there_a_winner(sticks):
+#     if sticks == 0:
+#         return
 
 game()
 
