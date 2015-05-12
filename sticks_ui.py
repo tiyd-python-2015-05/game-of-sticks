@@ -8,6 +8,8 @@ class Talker:
 
     def __init__(self):
         self.game = Game()
+
+    def go(self):
         self.get_names()
         self.play()
 
@@ -18,7 +20,7 @@ class Talker:
             return number.lower()[0] == 'y'
         else:
             print('Try again!  Answer [yes] or [no].')
-            number = self.get_players(self)
+            number = self.get_players()
 
     def get_names(self):
 
@@ -52,15 +54,19 @@ class Talker:
 
                 new_game.set_players(unicron1, unicron2)
                 wins = {unicron1:0, unicron2:0}
-                for _ in range(1000):
+
+                for _ in range(10000):
                     wins[self.quick_play(new_game)] += 1
 
-                return max(wins, key=lambda x: x[1])
+                if wins[unicron1] > wins[unicron2]:
+                    return unicron1
+                return unicron2
 
 
     def get_sticks(self):
         number = input("How many sticks are on the table (10-100)? ")
         if number.isdigit():
+            number = int(number)
             if number not in list(range(10, 101)):
                 number = self.get_sticks()
         else:
@@ -69,7 +75,7 @@ class Talker:
         return number
 
     def quick_play(self, game):
-        game.start(random.randint(10,101))
+        game.start(random.randint(10,100))
 
         while not game.is_done():
             game.turn()
@@ -124,3 +130,4 @@ class Talker:
 
 if __name__ == '__main__':
     talker = Talker()
+    talker.go()
