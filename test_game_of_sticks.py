@@ -19,19 +19,21 @@ def test_player_can_choose_num_sticks():
     assert player1.choose(auto=3) == 3
 
 class AutoPlayer(Player):
-    def choose(self, auto=3):
-        return auto
+    pass
+class PlayerThatAlwaysPicksThree(Player):
+    def choose(self):
+        return 3
 
 def test_first_turn_removes_sticks():
-    p1 = AutoPlayer()
-    p2 = AutoPlayer()
+    p1 = PlayerThatAlwaysPicksThree()
+    p2 = PlayerThatAlwaysPicksThree()
     game = SticksGame(p1, p2, sticks=100)
     game.start()
     assert game.sticks == 97
 
 def test_switch_players():
-    p1 = AutoPlayer()
-    p2 = AutoPlayer()
+    p1 = PlayerThatAlwaysPicksThree()
+    p2 = PlayerThatAlwaysPicksThree()
     game = SticksGame(p1, p2, sticks=100)
     assert game.current_player == p1
     game.start()
@@ -39,8 +41,8 @@ def test_switch_players():
     assert game.current_player == p2
 
 def test_winner():
-    p1 = AutoPlayer()
-    p2 = AutoPlayer()
+    p1 = PlayerThatAlwaysPicksThree()
+    p2 = PlayerThatAlwaysPicksThree()
     game = SticksGame(p1, p2, sticks=100)
     game.start()
     game.next_turn()
@@ -63,3 +65,16 @@ def test_winner():
     game.next_turn()
     print('after next next turn', game.sticks)
     assert game.check_winner() == p2
+
+def test_invalid_choice_rejected():
+    p1 = AutoPlayer()
+    p2 = AutoPlayer()
+    random.seed(10)
+    # This should make choices = 3, 1, 2...
+    game = SticksGame(p1, p2, sticks=2)
+    game.start()
+    assert game.sticks == 1
+
+
+def test_auto_game_outcomes():
+    assert False
