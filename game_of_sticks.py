@@ -2,15 +2,24 @@ import random
 
 class SticksGame:
     def __init__(self, p1, p2, sticks=100):
-        self.sticks = sticks
         self.current_player = p1
         self.player_a = p1
         self.player_b = p2
         self.max_draw = 3
         self.player_a.initial = '1'
         self.player_b.initial = '2'
+        self.set_sticks(sticks)
+
+    def set_sticks(self, sticks=100):
+        self.sticks = sticks
         self.player_a.sticks = sticks
         self.player_b.sticks = sticks
+        if sticks > 3:
+            self.player_a.max_draw = 3
+            self.player_b.max_draw = 3
+        else:
+            self.player_a.max_draw = sticks
+            self.player_b.max_draw = sticks
 
     def play(self):
         while self.check_winner() is None:
@@ -89,35 +98,50 @@ class Turn:
 class Session:
     def __init__(self):
         self.game = None
+        self.sticks = 100
+        self.human1 = HumanPlayer('Harry')
+        self.human2 = HumanPlayer('Sally')
+        self.npc1 = RandomPlayer('Marvin')
+        self.npc2 = RandomPlayer('R2')
     def h_vs_h(self):
-        p1 = HumanPlayer('Harry')
-        p2 = HumanPlayer('Sally')
-        self.game = SticksGame(p1, p2, sticks=10)
+        p1 = self.human1
+        p2 = self.human2
+        self.game = SticksGame(p1, p2, sticks=self.sticks)
         self.game.play()
         return self.game.check_winner()
 
     def h_vs_c(self):
-        p1 = HumanPlayer('Harry')
-        p2 = RandomPlayer('Sally')
-        self.game = SticksGame(p1, p2, sticks=10)
+        p1 = self.human1
+        p2 = self.npc1
+        self.game = SticksGame(p1, p2, sticks=self.sticks)
         self.game.play()
         return self.game.check_winner()
 
 
     def c_vs_c(self):
-        p1 = RandomPlayer('Harry')
-        p2 = RandomPlayer('Sally')
-        self.game = SticksGame(p1, p2, sticks=100)
+        p1 = self.npc1
+        p2 = self.npc2
+        self.game = SticksGame(p1, p2, sticks=self.sticks)
         self.game.play()
         return self.game.check_winner()
 
 class UserInterface():
     def __init__(self):
         self.my_session = Session()
+    def num_sticks_menu(self):
+        try:
+            sticks = int(input('How many sticks are on the table? [10-100]:'))
+            if 10 <= sticks <=100:
+                self.my_session.sticks = sticks
+                return
+            return self.num_sticks_menu()
+        except ValueError:
+            print('Please enter a number between 10 and 100.')
+            return self.num_sticks_menu()
     def num_player_menu(self):
         try:
-            mode = int(input('How many human players? [0-2]?'))
-        except:
+            mode = int(input('How many human players? [0-2]: '))
+        except ValueError:
             return self.num_player_menu()
         if mode == 2:
             return self.my_session.h_vs_h()
@@ -125,6 +149,7 @@ class UserInterface():
             return self.my_session.h_vs_c()
         if mode == 0:
             return self.my_session.c_vs_c()
+        print('Please enter a number between 0 and 2.')
         return self.num_player_menu()
     def welcome_menu(self):
         print('Welcome to The Game of Sticks!')
@@ -136,6 +161,7 @@ class UserInterface():
 
     def main(self):
         self.welcome_menu()
+        self.num_sticks_menu()
         def loop():
             self.num_player_menu()
             self.game_over_menu()
