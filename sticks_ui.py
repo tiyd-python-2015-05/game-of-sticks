@@ -4,6 +4,7 @@ from hard_mode import HardComputer
 import os
 import random
 
+
 class Talker:
 
     def __init__(self):
@@ -53,7 +54,7 @@ class Talker:
                 unicron2 = HardComputer('Unicron')
 
                 new_game.set_players(unicron1, unicron2)
-                wins = {unicron1:0, unicron2:0}
+                wins = {unicron1: 0, unicron2: 0}
 
                 for _ in range(10000):
                     wins[self.quick_play(new_game)] += 1
@@ -61,7 +62,6 @@ class Talker:
                 if wins[unicron1] > wins[unicron2]:
                     return unicron1
                 return unicron2
-
 
     def get_sticks(self):
         number = input("How many sticks are on the table (10-100)? ")
@@ -75,20 +75,19 @@ class Talker:
         return number
 
     def quick_play(self, game):
-        game.start(random.randint(10,100))
+        game.start(random.randint(10, 100))
 
         while not game.is_done():
             game.turn()
             game.switch_player()
 
-        game.current_player.finish() # learn
-        game.current_player.reset() # get ready for next round
+        game.current_player.finish()  # learn
+        game.current_player.reset()  # get ready for next round
         game.switch_player()
         game.current_player.reset()
 
         game.switch_player()
         return game.current_player
-
 
     def play(self):
         self.game.start(self.get_sticks())
@@ -97,6 +96,10 @@ class Talker:
         while self.play_again():
             self.game.start(self.get_sticks())
             self.loop()
+
+        # if isinstance(self.game.players[1], HardComputer):
+        #    for key, item in self.game.players[1].start_hats.items():
+        #        print(item)
 
     def play_again(self):
         yes_no = input("Would you like to play again? [Y]es or [N]o: ")

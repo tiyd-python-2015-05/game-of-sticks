@@ -35,6 +35,7 @@ class Game:
     def status(self):
         return self.current_player.name, self.removed_sticks, self.sticks
 
+
 class Player:
     def __init__(self, name):
         self.name = name
@@ -60,11 +61,11 @@ class Human(Player):
 
 class Computer(Player):
 
-    def __init__(self,name='Starscream'):
+    def __init__(self, name='Starscream'):
         super().__init__(name)
 
     def turn(self, sticks):
-        num = random.randint(1,3)
+        num = random.randint(1, 3)
         while not (0 < num < 4 and sticks - num >= 0):
-            num = random.randint(1,3)
+            num = random.randint(1, 3)
         return num

@@ -6,12 +6,12 @@ proto = {}
 end = [0 for _ in range(101)]
 
 for i in range(101):
-    proto[i] = [1,2,3]
+    proto[i] = [1, 2, 3]
 
 
 class HardComputer(Computer):
 
-    def __init__(self,name='Megatron'):
+    def __init__(self, name='Megatron'):
         super().__init__(name)
         self.start_hats = proto
         self.end_hats = end
@@ -33,4 +33,3 @@ class HardComputer(Computer):
         for indx, val in enumerate(self.end_hats):
             if val is not 0:
                 self.start_hats[indx].append(val)
-                
