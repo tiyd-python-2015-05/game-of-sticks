@@ -147,3 +147,11 @@ def test_play():
     game = SticksGame(p1, p2, sticks=12)
     game.play()
     assert game.check_winner() == p1
+
+def test_c_vs_c_p1_fraction():
+    my_session = Session()
+    wins = ''
+    for _ in range(1000):
+        winner = my_session.c_vs_c()
+        wins = wins + winner.initial
+    assert 400 < wins.count('1') < 600
