@@ -39,22 +39,46 @@ class Game:
 # fixed logic, fix tests
         self.winner = self.current_player
 
+    def reset_game_values(self):
+        self.sticks = 100
+        self.game_over = False
+        self.current_player = self.player1
+        self.winner = None
+        self.number_players = 2
+
+    def display_sticks(self):
+        if self.sticks > 0:
+            print("There are {} sticks left.".format(self.sticks), end="  ")
+            if self.sticks > 20:
+                print("}}" + "|"*20)
+            else:
+                print("|" * self.sticks)
+
+
 
     def start(self):
         while True:
             self.number_players = self.player1.initial_setup()
             self.sticks = self.player1.initial_sticks()
-            self.player1.name = self.player1.input_name()
-            self.player2.name = self.player2.input_name()
+            if self.player1.name == "Player 1":
+                self.player1.name = self.player1.input_name()
+            if self.player2.name == "Player 2":
+                self.player2.name = self.player2.input_name()
             while not self.game_over:
 #                print(self.game_over)
                 sticks_taken = self.current_player.number_of_sticks()
                 self.decrement_sticks(sticks_taken)
-                print("There are now {} sticks left.".format(self.sticks))
+                self.display_sticks()
+                # print("There are {} sticks left.".format(self.sticks), end="  ")
+                # if self.sticks > 20:
+                #     print("}}" + "|"*20)
+                # else:
+                #     print("|" * self.sticks)
                 self.switch_player()
                 self.game_over_check()
             self.make_winner()
-            print("Congratulations {}".format(self.winner.name))
+            print("Congratulations {}!!  You win!!!".format(self.winner.name))
+            self.reset_game_values()
             if not self.player1.play_again():
                 break
 
@@ -83,20 +107,20 @@ class HumanPlayer(Player):
         print("WELCOME TO THE GAME OF STICKS. In the Game of Sticks there is " \
         "a heap of sticks on a board. On their turn, each player picks up 1 to"\
         " 3 sticks. The one who has to pick the final stick will be the " \
-        "loser.")
-        try:
-            players = int(input("How many human players? (1 or 2 please): "))
-            if players != 1 and players != 2:
-                return self.initial_setup()
-            else:
-                return players
-        except ValueError:
-            print("Numbers only!!")
-            return self.initial_setup()
+        "loser. GOOD LUCK. \n")
+        # try:
+        #     players = int(input("How many human players? (1 or 2 please): "))
+        #     if players != 1 and players != 2:
+        #         return self.initial_setup()
+        #     else:
+        #         return players
+        # except ValueError:
+        #     print("Numbers only!!")
+        #     return self.initial_setup()
 
     def initial_sticks(self):
         try:
-            print("How many sticks to start with"),
+            print("How many sticks to start with?", end=" ")
             total_sticks = int(input("(between 10 and 100): "))
 #fix error
             if total_sticks not in range(10,101):
@@ -115,6 +139,7 @@ class HumanPlayer(Player):
         try:
             num_sticks = int(input("{}, how many sticks do you take? (1, 2, or 3): ".format(self.name)))
             if num_sticks not in [1, 2, 3]:
+                print("You can only pick 1, 2, or 3 sticks.")
                 return self.number_of_sticks()
             else:
                 return num_sticks
@@ -130,8 +155,26 @@ class HumanPlayer(Player):
         else:
             return False
 
+
+def one_or_two_player():
+    try:
+        players = int(input("How many human players? (1 or 2 please): "))
+        if players != 1 and players != 2:
+            return one_or_two_player()
+        else:
+            return players
+    except ValueError:
+        print("Numbers only!!")
+        return one_or_two_player()
+
+
 if __name__ == '__main__':
-    p1 = HumanPlayer("Player 1")
-    p2 = HumanPlayer("Player 2")
+    player = one_or_two_player()
+    if player == 1:
+        p1 = HumanPlayer("Player 1")
+        p2 = HumanPlayer("Player 2")
+    else:
+        p1 = HumanPlayer("Player 1")
+        p2 = HumanPlayer("Player 2")
     game = Game(p1, p2)
     game.start()
