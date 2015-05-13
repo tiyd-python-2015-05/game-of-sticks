@@ -80,7 +80,7 @@ class Game:
                 idx1 = 0
                 idx2 = 1
             else:
-                idx = 1
+                idx1 = 1
                 idx2 = 0
 
             player1 = players[idx1]
@@ -90,7 +90,7 @@ class Game:
             while self.game_over(self.available_sticks):
                 self.switch_player(player1, player2)
                 print("{} is now playing".format(self.current_player))
-                self.available_sticks = self.remaining_sticks(player1.sticks_choice(self.available_sticks), self.available_sticks)
+                self.available_sticks = self.remaining_sticks(self.current_player.sticks_choice(self.available_sticks), self.available_sticks)
                 if self.available_sticks == 0:
                     print("Hey {}! You lost the game!".format(self.current_player))
                     self.game_continue()

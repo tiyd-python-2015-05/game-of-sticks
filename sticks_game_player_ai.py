@@ -5,6 +5,11 @@ import random
 
 
 class AIPlayer(Player):
+    def __init__(self, name="Sungura", hat=0):
+        super().__init__(name)
+        self.hat = hat
+
+
     def sticks_choice(self, available_sticks):
         sticks = random.choice([1,2,3])
         if 1 <= sticks <= 3 and sticks <= available_sticks:
@@ -25,31 +30,20 @@ class AIGame(Game):
         while True:
             aiplayer = AIPlayer("Twiga")
             player = Player("Tembo")
-            '''
-            players = [AIPlayer("Twiga"), Player("Hilde")]
-            if random.randint(0,1) == 0:
-                idx1 = 0
-                idx2 = 1
-            else:
-                idx1 = 1
-                idx2 = 0
-
-            player1 = players[idx1]
-            player2 = players[idx2]
-            '''
             self.available_sticks =self.game_sticks()
             print("The game has {} sticks on board".format(self.available_sticks))
             while self.game_over(self.available_sticks):
                 self.switch_player(aiplayer, player)
-                if isinstance(self.current_player, AIPlayer):
-                    self.available_sticks = self.remaining_sticks(aiplayer.sticks_choice(self.available_sticks), self.available_sticks)
-                else:
+                if not isinstance(self.current_player, AIPlayer):
                     print("{} is now playing".format(self.current_player))
-                    self.available_sticks = self.remaining_sticks(player.sticks_choice(self.available_sticks), self.available_sticks)
+                self.available_sticks = self.remaining_sticks(self.current_player.sticks_choice(self.available_sticks),
+                                            self.available_sticks)
                 if self.available_sticks == 0:
                     print("Hey {}! You lost the game!".format(self.current_player))
                     self.game_continue()
-                    
+
 
 if __name__ == '__main__':
-    AIGame()
+    #AIGame()
+    player = AIPlayer()
+    print(player)
