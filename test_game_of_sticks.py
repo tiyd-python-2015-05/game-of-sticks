@@ -1,4 +1,4 @@
-from game_of_sticks import SticksGame, Player, AIPlayer
+from game_of_sticks import SticksGame, Player, AIPlayer, AISticksGame
 
 
 def test_SticksGame_has_pile():
@@ -105,3 +105,9 @@ def test_AI_choices():
     """An initial player should have 1, 2, 3 as choices for all numbers."""
     ai = AIPlayer()
     assert ai.choices(13) == [1, 2, 3]
+
+def test_AISticksGame():
+    HAL = AIPlayer()
+    GLaDOS = AIPlayer()
+    game = AISticksGame(HAL, GLaDOS)
+    assert game.start() == HAL or game.start() == GLaDOS

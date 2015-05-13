@@ -14,14 +14,12 @@ class SticksGame:
         self.player2 = player2
         self.current_player = player1
 
-    def display_rules(self):
-        print("Welcome to the Game of Sticks!\n\
-In the Game of Sticks there is a heap of sticks on a board.\n\
-On their turn, each player picks up 1 to 3 sticks.\n\
-The one who has to pick the final stick will be the loser.\n")
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     def display_pile(self):
         return "Pile contains {} sticks.".format(self.pile)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     def switch_players(self):
         if self.current_player == self.player1:
@@ -29,11 +27,16 @@ The one who has to pick the final stick will be the loser.\n")
         else:
             self.current_player = self.player1
 
-    def remove(self):
-        print("Currently {}'s turn".format(self.current_player.name))
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+    def remove(self, silent=False):
+        if not silent:
+            print("Currently {}'s turn\n".format(self.current_player.name))
         self.current_player.pick_up(self.pile)
         self.pile -= self.current_player.sticks
         self.current_player.sticks = 0
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     def winner(self):
         if self.pile > 0:
@@ -41,17 +44,7 @@ The one who has to pick the final stick will be the loser.\n")
         else:
             return self.current_player
 
-    def menu(self):
-        self.display_rules()
-
-        go = input("Ready? (y/n) ").lower()
-
-        if go[0] == "y":
-            self.start()
-        elif go[0] == "n":
-            return
-        else:
-            self.menu()
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     def start(self):
         self.pile = 20
@@ -66,6 +59,8 @@ The one who has to pick the final stick will be the loser.\n")
         self.player1.win_check()
         self.player2.win_check()
         self.play_again()
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     def play_again(self):
         go_again = input("Would you like to play again (y/n)? ").lower()
@@ -87,6 +82,8 @@ class Player:
         self.sticks = 0
         self.win_state = False
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
     def pick_up(self, remaining):
         try:
             num = int(input("How many sticks would you like to pick up? "))
@@ -100,9 +97,14 @@ class Player:
             print("Invalid choice!")
             return self.pick_up(remaining)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
     def win_check(self):
         if self.win_state:
-            print("The winner is {}!".format(self.name))
+            print("The winner is {}!\n".format(self.name))
+            self.win_state = False
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     def __repr__(self):
         return self.name
@@ -117,25 +119,35 @@ class AIPlayer(Player):
         self.possibilities = {}
         self.tally = 0
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
     def choices(self, remaining):
         return self.possibilities.setdefault(remaining, [1, 2, 3])
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     def pick_up(self, remaining):
         choice = random.choice(self.choices(remaining))
         self.chosen[remaining] = choice
         self.sticks = choice
 
-    def win_check(self):
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+    def win_check(self, silent=False):
         if self.win_state:
-            print("The winner is {}!".format(self.name))
+            if not silent:
+                print("The winner is {}!\n".format(self.name))
             self.integrate_win()
             self.tally += 1
+            self.win_state = False
         else:
             self.chosen = {}
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
     def integrate_win(self):
-        # for each choice made, add that choice into the
-        # possible choices
+        """for each choice made, add that choice into the
+        possible choices"""
         for key in self.chosen:
             self.possibilities[key].append(self.chosen[key])
 
@@ -144,7 +156,31 @@ class AIPlayer(Player):
 
 ###############################################################################
 
+
+class AISticksGame(SticksGame):
+    def start(self):
+        count = 100000
+        while count > 0:
+            self.pile = 20
+            while not self.winner():
+                self.remove(silent=True)
+                self.switch_players()
+
+            self.current_player.win_state = True
+            self.player1.win_check(silent=True)
+            self.player2.win_check(silent=True)
+            count -= 1
+        if self.player1.tally >= self.player2.tally:
+            return self.player1
+        else:
+            return self.player2
+
+
+###############################################################################
+
+
 def menu():
+    os.system('clear')
     print("Welcome to the Game of Sticks!\n\
 In the Game of Sticks there is a heap of sticks on a board.\n\
 On their turn, each player picks up 1 to 3 sticks.\n\
@@ -166,10 +202,13 @@ a [c]omputer, or a [t]rained computer? ").lower()
         player2 = AIPlayer()
         game = SticksGame(player1, player2)
         game.start()
-    elif set_up[0] == "c":
+    elif set_up[0] == "t":
+        ai1 = AIPlayer()
+        ai2 = AIPlayer()
+        AI_game = AISticksGame(ai1, ai2)
         player_name = input("Your Name: ")
         player1 = Player(player_name)
-        player2 = AIPlayer()
+        player2 = AI_game.start()
         game = SticksGame(player1, player2)
         game.start()
     else:
