@@ -1,5 +1,7 @@
 # Created by https://www.gitignore.io
 
+notes.txt
+
 ### IPythonNotebook ###
 # Temporary data
 .ipynb_checkpoints/

@@ -1,5 +1,22 @@
 # Game of Sticks
 
+Welcome to GAME OF STICKS
+To run the game, open Terminal and type 'python3 game_of_sticks.py'
+
+In the Game of Sticks there is a heap of sticks on a board. On their turn,
+each player picks up 1 to 3 sticks. The one who has to pick the final stick
+will be the loser.
+
+The current version is set up to play with 2 human players only, though it will
+ask how many players you have at the beginning.  A 1 player version against
+AI is in the works.
+
+After each game you will be asked if you'd like to play again.  Please do!
+
+If you'd like to end the game early, CTRL - C will work.
+
+
+
 ## Description
 
 Create a version of the Game of Sticks where human and AI players can play
