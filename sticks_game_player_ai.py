@@ -15,6 +15,11 @@ class AIPlayer(Player):
 
 
 class AIGame(Game):
+
+    def game_sticks(self):
+        return random.randint(10,100)
+
+
     def play(self):
         self.welcome()
         while True:
@@ -32,7 +37,7 @@ class AIGame(Game):
             player1 = players[idx1]
             player2 = players[idx2]
             '''
-            self.available_sticks = random.randint(10,100)
+            self.available_sticks =self.game_sticks()
             print("The game has {} sticks on board".format(self.available_sticks))
             while self.game_over(self.available_sticks):
                 self.switch_player(aiplayer, player)
@@ -44,13 +49,7 @@ class AIGame(Game):
                 if self.available_sticks == 0:
                     print("Hey {}! You lost the game!".format(self.current_player))
                     self.game_continue()
-
-
-    def __init__(self, available_sticks=0, sticks_balance=0):
-        self.available_sticks = available_sticks
-        self.sticks_balance = sticks_balance
-        self.play()
-
+                    
 
 if __name__ == '__main__':
     AIGame()
