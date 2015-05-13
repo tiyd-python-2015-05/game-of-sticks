@@ -1,3 +1,5 @@
+import random
+
 class Game:
 #Displays initial instructions
 #Asks for number of players (1 or 2)
@@ -8,9 +10,10 @@ class Game:
 #Keep of tally of sticks remaining
 #Checks winner/Stops when sticks reach 0
 #Switch player
-    def __init__(self, player1, player2):
+    def __init__(self, player1, player2, num_player):
         self.player1 = player1
         self.player2 = player2
+        self.num_player = num_player
         self.sticks = 100
         self.game_over = False
         self.current_player = self.player1
@@ -70,13 +73,15 @@ class Game:
             if self.player2.name == "Player 2":
                 self.player2.name = self.player2.input_name()
             while not self.game_over:
-                sticks_taken = self.current_player.number_of_sticks()
+                sticks_taken = self.current_player.number_of_sticks(self.sticks)
                 self.decrement_sticks(sticks_taken)
                 self.display_sticks()
                 self.switch_player()
                 self.game_over_check()
             self.make_winner()
             self.reset_game_values()
+            if self.num_player == 1:
+                pass
             if not self.player1.play_again():
                 break
 
@@ -110,17 +115,17 @@ class HumanPlayer(Player):
         return input("{}, What is your name?: ".format(self.name))
 
 
-    def number_of_sticks(self):
+    def number_of_sticks(self, sticks_left):
         try:
             num_sticks = int(input("{}, how many sticks do you take? (1, 2, or 3): ".format(self.name)))
             if num_sticks not in [1, 2, 3]:
                 print("You can only pick 1, 2, or 3 sticks.")
-                return self.number_of_sticks()
+                return self.number_of_sticks(sticks_left)
             else:
                 return num_sticks
         except ValueError:
             print("Numbers only!!")
-            return self.number_of_sticks()
+            return self.number_of_sticks(sticks_left)
 
 
     def play_again(self):
@@ -130,8 +135,49 @@ class HumanPlayer(Player):
         else:
             return False
 
+
 class ComputerPlayer(Player):
-    pass
+    #computer player creates dictionary with keys 1 to 100 and with list of values 1to3
+    #for each game, saves dict with number and choice for each turn
+    #if win, appends choice to key: value list
+    #if lose, takes 1 instance of choice from key value list
+    def __init__(self, name="Numbotronic 5000",odds_hat={i: [1, 2, 3] for i in
+                range(1,100)}, odds_holder={i: [] for i in range(1,100)}):
+        self.name = name
+        self.odds_hat = odds_hat
+        self.odds_holder = odds_holder
+
+#    def initialize_dict(self):
+#        self.odds_hat = {i: [1, 2, 3] for i in range(1,100)}
+
+    def input_name(self):
+        return "Numbotronic 5000"
+
+    def increment_odds_holder(self, sticks_left, choice):
+        (self.odds_holder[sticks_left]).append(choice)
+
+    def number_of_sticks(self, sticks_left):
+        if len(self.odds_hat[sticks_left]) > 0:
+            choice = random.choice(self.odds_hat[sticks_left])
+        else:
+            choice = random.choice([1, 2, 3])
+        print("{} takes {}.".format(self.name, choice))
+        self.increment_odds_holder(sticks_left, choice)
+        return choice
+
+    def add_odds_holder_to_hat(self):
+        for i, j in self.odds_holder.items():
+            for a in j:
+                (self.odds_hat[i]).append(a)
+
+
+    def sub_odds_holder_from_hat(self):
+        for i, j in self.odds_holder.items():
+            for a in j:
+                (self.odds_hat[i]).remove(a)
+
+
+
 
 
 def one_or_two_player():
@@ -147,12 +193,12 @@ def one_or_two_player():
 
 
 if __name__ == '__main__':
-    player = one_or_two_player()
-    if player == 1:
+    num_player = one_or_two_player()
+    if num_player == 1:
         p1 = HumanPlayer("Player 1")
-        p2 = HumanPlayer("Player 2")
+        p2 = ComputerPlayer("Player 2")
     else:
         p1 = HumanPlayer("Player 1")
         p2 = HumanPlayer("Player 2")
-    game = Game(p1, p2)
+    game = Game(p1, p2, num_player)
     game.start()

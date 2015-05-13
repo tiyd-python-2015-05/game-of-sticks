@@ -72,7 +72,7 @@ def test_reset_game_values():
     game1.winner = "Josh"
     game1.reset_game_values()
     assert game1.sticks == 100
-    assert game1.winner = None
+    assert game1.winner == None
 
 
 def test_display_sticks():
@@ -81,13 +81,46 @@ def test_display_sticks():
     game1 = Game(p1, p2)
     game1.sticks = 20
 
+def test_create_computer_player():
+    p1 = ComputerPlayer()
+    p1.name = p1.input_name()
+    assert p1.name == "Numbotronic 5000"
+#    assert p1.number_of_sticks(12) == 3
+    assert p1.odds_hat[1] == [1, 2, 3]
+    assert p1.odds_hat[99] == [1, 2, 3]
+    assert p1.odds_holder[1] == []
+    assert p1.odds_holder[75] == []
 
-class OnePlayer(Player):
-    def __init__(self):
-        super().__init__()
+def test_increment_odds_holder():
+    p1 = ComputerPlayer()
+    assert p1.odds_holder[5] == []
+    p1.increment_odds_holder(5, 1)
+    assert p1.odds_holder[5] == [1]
 
-    def initial_setup(self):
-        return 1
+def test_add_odds_holder_to_hat():
+    p1 = ComputerPlayer()
+    assert p1.odds_holder[7] == []
+    p1.increment_odds_holder(7, 1)
+    assert p1.odds_holder[7] == [1]
+    p1.add_odds_holder_to_hat()
+    assert (p1.odds_hat)[7] == [1, 2, 3, 1]
+
+def test_sub_odds_holder_from_hat():
+    p1 = ComputerPlayer()
+    assert p1.odds_holder[9] == []
+    p1.increment_odds_holder(9, 1)
+    assert p1.odds_holder[9] == [1]
+    p1.sub_odds_holder_from_hat()
+    assert (p1.odds_hat)[9] == [2, 3]
+
+
+
+#class OnePlayer(Player):
+#    def __init__(self):
+#        super().__init__()
+#
+#    def initial_setup(self):
+#        return 1
 
 # def test_player_settings():
 #     p1 = OnePlayer()
