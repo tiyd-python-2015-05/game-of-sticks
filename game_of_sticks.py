@@ -35,9 +35,9 @@ class Game:
 
 
     def make_winner(self):
-#        self.switch_player()
-# fixed logic, fix tests
         self.winner = self.current_player
+        print("Congratulations {}!!  You win!!!".format(self.winner.name))
+
 
     def reset_game_values(self):
         self.sticks = 100
@@ -46,6 +46,7 @@ class Game:
         self.winner = None
         self.number_players = 2
 
+
     def display_sticks(self):
         if self.sticks > 0:
             print("There are {} sticks left.".format(self.sticks), end="  ")
@@ -53,7 +54,6 @@ class Game:
                 print("}}" + "|"*20)
             else:
                 print("|" * self.sticks)
-
 
 
     def start(self):
@@ -65,32 +65,16 @@ class Game:
             if self.player2.name == "Player 2":
                 self.player2.name = self.player2.input_name()
             while not self.game_over:
-#                print(self.game_over)
                 sticks_taken = self.current_player.number_of_sticks()
                 self.decrement_sticks(sticks_taken)
                 self.display_sticks()
-                # print("There are {} sticks left.".format(self.sticks), end="  ")
-                # if self.sticks > 20:
-                #     print("}}" + "|"*20)
-                # else:
-                #     print("|" * self.sticks)
                 self.switch_player()
                 self.game_over_check()
             self.make_winner()
-            print("Congratulations {}!!  You win!!!".format(self.winner.name))
             self.reset_game_values()
             if not self.player1.play_again():
                 break
 
-
-
-
-
-
-#class Turn:
-#    pass
-#Asks player how many sticks they want to choose
-#Switches current player
 
 class Player:
     def __init__(self, name="Arlo"):
@@ -122,7 +106,6 @@ class HumanPlayer(Player):
         try:
             print("How many sticks to start with?", end=" ")
             total_sticks = int(input("(between 10 and 100): "))
-#fix error
             if total_sticks not in range(10,101):
                 return self.initial_sticks()
             else:
@@ -130,6 +113,7 @@ class HumanPlayer(Player):
         except ValueError:
             print("Numbers only!!")
             return self.initial_sticks()
+
 
     def input_name(self):
         return input("{}, What is your name?: ".format(self.name))
