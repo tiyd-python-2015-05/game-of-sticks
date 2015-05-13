@@ -75,6 +75,13 @@ def test_reset_game_values():
     assert game1.winner = None
 
 
+def test_display_sticks():
+    p1 = Player()
+    p2 = Player()
+    game1 = Game(p1, p2)
+    game1.sticks = 20
+
+
 class OnePlayer(Player):
     def __init__(self):
         super().__init__()

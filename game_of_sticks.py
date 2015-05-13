@@ -15,7 +15,13 @@ class Game:
         self.game_over = False
         self.current_player = self.player1
         self.winner = None
-        self.number_players = 2
+
+
+    def initial_setup(self):
+        print("WELCOME TO THE GAME OF STICKS. In the Game of Sticks there is " \
+        "a heap of sticks on a board. On their turn, each player picks up 1 to"\
+        " 3 sticks. The one who has to pick the final stick will be the " \
+        "loser. GOOD LUCK. \n")
 
 
     def game_over_check(self):
@@ -44,7 +50,6 @@ class Game:
         self.game_over = False
         self.current_player = self.player1
         self.winner = None
-        self.number_players = 2
 
 
     def display_sticks(self):
@@ -58,7 +63,7 @@ class Game:
 
     def start(self):
         while True:
-            self.number_players = self.player1.initial_setup()
+            self.initial_setup()
             self.sticks = self.player1.initial_sticks()
             if self.player1.name == "Player 1":
                 self.player1.name = self.player1.input_name()
