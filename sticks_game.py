@@ -35,19 +35,6 @@ class Game:
                 - The one to pick the last stick is the loser")
 
 
-    def is_integer(self, num = 0):
-        '''check that the choice is an integer'''
-        return isinstance(num, int)
-
-
-    def is_valid_selection(self, choice, available_sticks):
-        '''test if the choice of sticks is valid'''
-        if choice < available_sticks and 1 <= choice <= 3:
-            return True
-        else:
-            return False
-
-
     def remaining_sticks(self, picked_sticks, initial_sticks):
         return initial_sticks - picked_sticks
 
