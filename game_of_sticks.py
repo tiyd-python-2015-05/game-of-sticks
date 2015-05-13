@@ -92,20 +92,6 @@ class Player:
 #Chooses to go again
 
 class HumanPlayer(Player):
-    def initial_setup(self):
-        print("WELCOME TO THE GAME OF STICKS. In the Game of Sticks there is " \
-        "a heap of sticks on a board. On their turn, each player picks up 1 to"\
-        " 3 sticks. The one who has to pick the final stick will be the " \
-        "loser. GOOD LUCK. \n")
-        # try:
-        #     players = int(input("How many human players? (1 or 2 please): "))
-        #     if players != 1 and players != 2:
-        #         return self.initial_setup()
-        #     else:
-        #         return players
-        # except ValueError:
-        #     print("Numbers only!!")
-        #     return self.initial_setup()
 
     def initial_sticks(self):
         try:
@@ -143,6 +129,9 @@ class HumanPlayer(Player):
             return True
         else:
             return False
+
+class ComputerPlayer(Player):
+    pass
 
 
 def one_or_two_player():
