@@ -1,7 +1,8 @@
-class Game:
-    def __init__(self, player1, player2):
-        self.player1 = player1
-        self.player2 = player2
+class TwoPlayerGame:
+    '''Contains the gameplay for a two-person game of sticks'''
+    def __init__(self):
+        self.player1 = Player(input("Player 1, what is your name?: "))
+        self.player2 = Player(input("Player 2, what is your name?: "))
         self.current_player = self.player1
         self.number_of_sticks = 0
         self.winner = None
@@ -20,6 +21,12 @@ class Game:
         else:
             self.get_winner()
             print("There is one stick left on the board, {} wins".format(self.winner))
+
+        self.play_again = input("Do you want to play again (Y/N)?").lower()
+        if self.play_again == "y":
+            self.start()
+        else:
+            quit()
 
 
     def get_choice(self):
@@ -71,9 +78,5 @@ class Player:
         return self.name
 
 if __name__ == '__main__':
-    name1 = input("Player 1, what is your name?: ")
-    name2 = input("Player 2, what is your name?: ")
-    p1 = Player(name1)
-    p2 = Player(name2)
-    game = Game(p1, p2)
+    game = TwoPlayerGame()
     game.start()
