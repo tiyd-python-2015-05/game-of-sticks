@@ -81,7 +81,10 @@ class Game:
             self.make_winner()
             self.reset_game_values()
             if self.num_player == 1:
-                pass
+                if self.winner == self.player2:
+                    self.player2.add_odds_holder_to_hat()
+                if self.winner == self.player1:
+                    self.player2.sub_odds_holder_from_hat()
             if not self.player1.play_again():
                 break
 
