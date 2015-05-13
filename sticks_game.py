@@ -34,13 +34,28 @@ class Game:
         return initial_sticks - picked_sticks
 
 
+    def game_sticks(self):
+        sticks = input("How many sticks are there on the table (10-100)? ")
+        try:
+            sticks = int(sticks)
+            if 10 <= sticks <= 100:
+                return sticks
+            else:
+                print("Sticks should be between 10 and 100")
+                return self.game_sticks()
+        except ValueError:
+            print("Please enter a number")
+            self.game_sticks()
+
     def play(self):
         while True:
-            get_sticks = int(input("How many sticks are there on the table (10-100)? "))
+
             sticks = int(input("How many sticks do you take? "))
             if self.is_valid_selection(sticks, get_sticks):
                 if self.remaining_sticks(sticks, get_sticks) == 0:
                     print("Done")
+
+
 
 
 if __name__ == '__main__':
@@ -48,4 +63,4 @@ if __name__ == '__main__':
     player2 = Player("Hilde")
 
     game = Game()
-    #game.play()
+    game.game_sticks()
