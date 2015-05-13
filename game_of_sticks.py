@@ -17,7 +17,8 @@ class SticksGame:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     def display_pile(self):
-        return "Pile contains {} sticks.".format(self.pile)
+        return "Pile contains {} sticks.".format(self.pile) \
+               + (" / " * self.pile)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
@@ -55,6 +56,7 @@ class SticksGame:
             self.switch_players()
 
         self.current_player.win_state = True
+        os.system('clear')
         print("Game Over!")
         self.player1.win_check()
         self.player2.win_check()
