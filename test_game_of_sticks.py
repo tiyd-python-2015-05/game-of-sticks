@@ -30,7 +30,7 @@ def test_first_turn_removes_sticks():
     p1 = PlayerThatAlwaysPicksThree()
     p2 = PlayerThatAlwaysPicksThree()
     game = SticksGame(p1, p2, sticks=100)
-    game.start()
+    game.next_turn() #start()
     assert game.sticks == 97
 
 def test_switch_players():
@@ -38,7 +38,11 @@ def test_switch_players():
     p2 = PlayerThatAlwaysPicksThree()
     game = SticksGame(p1, p2, sticks=100)
     assert game.current_player == p1
-    game.start()
+    #start()
+    game.next_turn()
+    assert game.current_player == p2
+    game.next_turn()
+    assert game.current_player == p1
     game.next_turn()
     assert game.current_player == p2
 
@@ -46,26 +50,27 @@ def test_winner():
     p1 = PlayerThatAlwaysPicksThree()
     p2 = PlayerThatAlwaysPicksThree()
     game = SticksGame(p1, p2, sticks=100)
-    game.start()
+    game.next_turn() #start()
     game.next_turn()
     game.next_turn()
     game.next_turn()
     assert game.check_winner() is None
 
     game = SticksGame(p1, p2, sticks=6)
-    game.start()
-    print('after start', game.sticks)
+    game.next_turn() #start()
+    assert game.sticks == 3
+    print('after 1ß turn', game.sticks)
     game.next_turn()
-    print('after next turn', game.sticks)
+    print('after 2 turns', game.sticks)
     assert game.check_winner() == p1
 
     game = SticksGame(p1, p2, sticks=9)
-    game.start()
-    print('after start', game.sticks)
+    game.next_turn() #start()
+    print('after 1', game.sticks)
     game.next_turn()
-    print('after next turn', game.sticks)
+    print('after 2', game.sticks)
     game.next_turn()
-    print('after next next turn', game.sticks)
+    print('after 3', game.sticks)
     assert game.check_winner() == p2
 
 def test_invalid_choice_rejected_gracefully():
@@ -74,7 +79,7 @@ def test_invalid_choice_rejected_gracefully():
     random.seed(10)
     # This should make choices = 3, 1, 2...
     game = SticksGame(p1, p2, sticks=2)
-    game.start()
+    game.next_turn() # game.start()
     assert game.sticks == 1
 
 
@@ -93,15 +98,52 @@ def test_repeating_player():
     p1 = RepeatingPlayer()
     p2 = RepeatingPlayer()
     game = SticksGame(p1, p2, sticks=100)
-    game.start()
-    sticks_history = [97, 94, 92, 90, 89, 88, 85, 82, 81]
+    sticks_history = [100,97,94,92,90,89,88,85,82,80,78,77,76,73]
+    # [97,94,91,89,86,85,82,79,76,74] #PTAP3, Rep x3,3,x3,2,x3,1,x3,3,x3,2
+    # [98,95,92,90,89,88,86,83,80] # Auto, Repeat 2,3,3,2,1,1,2,3,3,
+    # Repeating**2 [97, 94, 93, 91, 89, 88, 85, 82] # -3,-3,-1,-2,-2,-1,-3
+    #game.start()
     score = iter(sticks_history)
     assert game.sticks == next(score)
-    for _ in range(len(sticks_history)):
+    for _ in range(len(sticks_history)-1):
         game.next_turn()
         assert game.sticks == next(score)
 
 
 
-def test_auto_game_outcomes():
-    assert False
+def test_auto_game_outcomes_p1_win():
+    p1 = RepeatingPlayer()
+    p2 = RepeatingPlayer()
+    game = SticksGame(p1, p2, sticks=12)
+    sticks_history = [12,9,6,4,2,1,0]
+    score = iter(sticks_history)
+    assert game.sticks == next(score)
+    for _ in range(len(sticks_history)-1):
+        game.next_turn()
+        assert game.sticks == next(score)
+    assert game.check_winner() == p1
+
+def test_auto_game_outcomes_p2_win():
+    p1 = RepeatingPlayer()
+    p2 = RepeatingPlayer()
+    game = SticksGame(p1, p2, sticks=11)
+    sticks_history = [11,8,5,3,1,0]
+    score = iter(sticks_history)
+    assert game.sticks == next(score)
+    for _ in range(len(sticks_history)-1):
+        game.next_turn()
+        assert game.sticks == next(score)
+    assert game.check_winner() == p2
+
+def test_play():
+    p1 = RepeatingPlayer()
+    p2 = RepeatingPlayer()
+    game = SticksGame(p1, p2, sticks=12)
+    game.play()
+    assert game.check_winner() == p1
+
+    p1 = RepeatingPlayer()
+    p2 = RepeatingPlayer()
+    game = SticksGame(p1, p2, sticks=12)
+    game.play()
+    assert game.check_winner() == p1
