@@ -80,9 +80,10 @@ class Player:
 
 class HumanPlayer(Player):
     def initial_setup(self):
-        print("""WELCOME TO THE GAME OF STICKS. In the Game of Sticks there is
-        a heap of sticks on a board. On their turn, each player picks up 1 to 3
-        sticks. The one who has to pick the final stick will be the loser.""")
+        print("WELCOME TO THE GAME OF STICKS. In the Game of Sticks there is " \
+        "a heap of sticks on a board. On their turn, each player picks up 1 to"\
+        " 3 sticks. The one who has to pick the final stick will be the " \
+        "loser.")
         try:
             players = int(input("How many human players? (1 or 2 please): "))
             if players != 1 and players != 2:
@@ -95,8 +96,8 @@ class HumanPlayer(Player):
 
     def initial_sticks(self):
         try:
-            total_sticks = int(input("""How many sticks to start with?
-            (between 10 and 100):"""))
+            print("How many sticks to start with"),
+            total_sticks = int(input("(between 10 and 100): "))
 #fix error
             if total_sticks not in range(10,101):
                 return self.initial_sticks()
@@ -109,16 +110,19 @@ class HumanPlayer(Player):
     def input_name(self):
         return input("{}, What is your name?: ".format(self.name))
 
+
     def number_of_sticks(self):
         try:
             num_sticks = int(input("{}, how many sticks do you take? (1, 2, or 3): ".format(self.name)))
             if num_sticks not in [1, 2, 3]:
-                return self.number_of_sticks
+                return self.number_of_sticks()
             else:
-                return int(num_sticks)
+                return num_sticks
         except ValueError:
             print("Numbers only!!")
-            return self.number_of_sticks
+            return self.number_of_sticks()
+
+
     def play_again(self):
         play_again = input("Do you want to play again? (y/n): ")
         if play_again.lower() == "y":
