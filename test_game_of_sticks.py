@@ -148,10 +148,27 @@ def test_play():
     game.play()
     assert game.check_winner() == p1
 
-def test_c_vs_c_p1_fraction():
+def test_random_c_vs_c_p1_fraction():
     my_session = Session()
+    my_session.npc1 = RandomPlayer('Marvin')
+    my_session.npc2 = RandomPlayer('R2')
     wins = ''
     for _ in range(1000):
         winner = my_session.c_vs_c()
         wins = wins + winner.initial
-    assert 400 < wins.count('1') < 600
+    assert 400 < wins.count('2') < 600
+
+def test_ai_c_vs_c_p1_fraction():
+    my_session = Session()
+    my_session.npc1 = RandomPlayer('Marvin')
+    my_session.npc2 = AIPlayer('R2')
+    random.seed()
+    wins = ''
+    for _ in range(1000):
+        winner = my_session.c_vs_c(silent=True)
+        wins = wins + winner.initial
+    print('Sticks\tTake1\tTake2\tTake3')
+    for sticks, dictionary in enumerate(my_session.npc2.hats):
+        c = lambda x: dictionary['in'].count(x)
+        print('{}\t{}\t{}\t{}'.format(sticks, c(1), c(2), c(3)))
+    assert wins.count('2') < 250
