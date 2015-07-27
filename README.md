@@ -1,4 +1,4 @@
-# Game of Sticks
+# Game of Sticks [![Build Status](https://travis-ci.org/jwaldrep/game-of-sticks.svg?branch=master)](https://travis-ci.org/jwaldrep/game-of-sticks)
 
 ## Description
 
