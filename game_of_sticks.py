@@ -276,8 +276,8 @@ class UserInterface():
         while self.play_again_menu():
             loop()
 
-    if __name__ == '__main__':
-        # my_session = Session()
-        # my_session.h_vs_h()
-        my_ui = UserInterface()
-        my_ui.main()
+if __name__ == '__main__':
+    # my_session = Session()
+    # my_session.h_vs_h()
+    my_ui = UserInterface()
+    my_ui.main()
