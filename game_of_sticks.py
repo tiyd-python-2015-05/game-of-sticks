@@ -234,7 +234,7 @@ class UserInterface():
         if mode == 2:
             return self.my_session.h_vs_h()
         if mode == 1:
-            rounds = self_training_menu()
+            rounds = self.training_menu()
             self.my_session.ai_training(rounds)
             self.my_session.npc2.show_wisdom()
             return self.my_session.h_vs_c()
